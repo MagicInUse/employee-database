@@ -24,7 +24,20 @@ class Query {
     }
 
     // TODO: View all departments
-
+    async getAllDepartments() {
+        // SQL query
+        const query = "SELECT * FROM department";
+        // try-catch block
+        try {
+            // execute the query
+            const res = await pool.query(query);
+            // return the result
+            return res.rows;
+        } catch (err) {
+            // return the error
+            return err;
+        }
+    }
 
     // TODO: View all roles
 
