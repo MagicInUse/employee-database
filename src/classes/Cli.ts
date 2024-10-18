@@ -26,6 +26,9 @@ class Cli {
       // call the testPrompt method for an example server response
       // this.testPrompt();
       this.viewAllDepartments();
+      this.viewAllRoles();
+      this.viewAllEmployees();
+      this.addDepartment();
   }
 
   // define the testPrompt method
@@ -42,7 +45,7 @@ class Cli {
         // log the user's response
         if (answers.department === "Engineering") {
           console.log("Viewing Engineering department...");
-          query.getAllEmployeeData().then((res) => { this.displayTable(res); });
+          query.getAllEmployees().then((res) => { this.displayTable(res); });
         }
         else if (answers.department === "Sales") {
           console.log("Viewing Sales department...");
@@ -102,8 +105,40 @@ class Cli {
   }
 
   viewAllDepartments() {
-    console.log("Viewing all departments...");
-    query.getAllDepartments().then((res) => { this.displayTable(res); });
+    query.getAllDepartments().then((res) => {
+      console.log("Viewing all departments...");
+      this.displayTable(res);
+    });
+  }
+
+  viewAllRoles() {
+    query.getAllRoles().then((res) => {
+      console.log("Viewing all roles...");
+      this.displayTable(res);
+    });
+  }
+
+  viewAllEmployees() {
+    query.getAllEmployees().then((res) => { 
+      console.log("Viewing all employees...");
+      this.displayTable(res);
+    });
+  }
+
+  addDepartment() {
+    console.log("Beginning the process of adding a department...");
+    inquirer.prompt([
+      {
+        type: "input",
+        name: "department",
+        message: "What is the name of the new department?"
+      }
+    ]).then((answers) => {
+      query.addDepartment(answers.department).then((_res) => { 
+        console.log("Department added successfully!"); 
+        this.viewAllDepartments();
+      });
+    });
   }
 }
 
