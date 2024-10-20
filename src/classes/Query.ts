@@ -204,7 +204,7 @@ class Query {
     // BONUS TODONE: View the total utilized budget of a department
     async getDepartmentBudget(departmentId: number) {
         // SQL query
-        const query = "SELECT SUM(salary) FROM role WHERE department_id = $1";
+        const query = "SELECT SUM(salary) AS Salary_Totals FROM role WHERE department_id = $1";
         // try-catch block
         try {
             // execute the query

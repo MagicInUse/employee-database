@@ -9,6 +9,7 @@ const query = new Query();
 
 // define the Cli class
 class Cli {
+
   // define the startCli method
   startCli() {
       // log a welcome message
@@ -37,7 +38,9 @@ class Cli {
       // this.deleteDepartment();
       // this.deleteRoles();
       // this.deleteEmployee();
-      this.getDepartmentBudget();
+      // this.getDepartmentBudget();
+
+      this.mainMenu();  
   }
 
   // define the testPrompt method
@@ -143,25 +146,24 @@ class Cli {
     Define advanced SQL functions
   */
 
-  addDepartment() {
+  async addDepartment() {
     console.log("Beginning the process of adding a department...");
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "department",
         message: "What is the name of the new department?"
       }
-    ]).then((answers) => {
-      query.addDepartment(answers.department).then((_res) => { 
-        console.log("Department added successfully!"); 
-        this.viewAllDepartments();
-      });
+    ]);
+    query.addDepartment(answers.department).then((_res) => { 
+      console.log("Department added successfully!"); 
+      this.viewAllDepartments();
     });
   }
 
-  addRole() {
+  async addRole() {
     console.log("Beginning the process of adding a role...");
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "title",
@@ -177,17 +179,16 @@ class Cli {
         name: "department_id",
         message: "What is the department ID of the new role?"
       }
-    ]).then((answers) => {
-      query.addRole(answers.title, answers.salary, answers.department_id).then((_res) => { 
-        console.log("Role added successfully!"); 
-        this.viewAllRoles();
-      });
+    ]);
+    query.addRole(answers.title, answers.salary, answers.department_id).then((_res) => { 
+      console.log("Role added successfully!"); 
+      this.viewAllRoles();
     });
   }
 
-  addEmployee() {
+  async addEmployee() {
     console.log("Beginning the process of adding an employee...");
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "first_name",
@@ -208,22 +209,21 @@ class Cli {
         name: "manager_id",
         message: "What is the manager ID of the new employee?"
       }
-    ]).then((answers) => {
-      if (answers.manager_id === "") {
-        answers.manager_id = null;
-      }
-      query.addEmployee(answers.first_name, answers.last_name, answers.role_id, answers.manager_id).then((_res) => { 
-        console.log("Employee added successfully!"); 
-        this.viewAllEmployees();
-      });
+    ])
+    if (answers.manager_id === "") {
+      answers.manager_id = null;
+    }
+    query.addEmployee(answers.first_name, answers.last_name, answers.role_id, answers.manager_id).then((_res) => { 
+      console.log("Employee added successfully!"); 
+      this.viewAllEmployees();
     });
   }
 
-  updateEmployeeRole() {
+  async updateEmployeeRole() {
     console.log("Beginning the process of updating an employee role...");
     this.viewAllEmployees();
     this.viewAllRoles();
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "employee_id",
@@ -234,11 +234,10 @@ class Cli {
         name: "role_id",
         message: "What is the new role ID?"
       }
-    ]).then((answers) => {
-      query.updateEmployeeRole(answers.employee_id, answers.role_id).then((_res) => { 
-        console.log("Employee role updated successfully!"); 
-        this.viewAllEmployees();
-      });
+    ]);
+    query.updateEmployeeRole(answers.employee_id, answers.role_id).then((_res) => { 
+      console.log("Employee role updated successfully!"); 
+      this.viewAllEmployees();
     });
   }
 
@@ -246,10 +245,10 @@ class Cli {
     Define Bonus SQL functions
   */
 
-  updateEmployeeManager() {
+  async updateEmployeeManager() {
     console.log("Beginning the process of updating an employee manager...");
     this.viewAllEmployees();
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "employee_id",
@@ -260,100 +259,94 @@ class Cli {
         name: "manager_id",
         message: "What is the new manager ID?"
       }
-    ]).then((answers) => {
-      if (answers.manager_id === "") {
-        answers.manager_id = null;
-      }
-      query.updateEmployeeManager(answers.employee_id, answers.manager_id).then((_res) => { 
-        console.log("Employee manager updated successfully!"); 
-        this.viewAllEmployees();
-      });
+    ]);
+    if (answers.manager_id === "") {
+      answers.manager_id = null;
+    }
+    query.updateEmployeeManager(answers.employee_id, answers.manager_id).then((_res) => { 
+      console.log("Employee manager updated successfully!"); 
+      this.viewAllEmployees();
     });
   }
 
-  viewEmployeesByManager() {
+  async viewEmployeesByManager() {
     console.log("Beginning the process of viewing employees by manager...");
     this.viewAllEmployees();
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "manager_id",
         message: "What is the ID of the manager?"
       }
-    ]).then((answers) => {
-      query.getEmployeesByManager(answers.manager_id).then((res) => { 
-        console.log("Viewing employees by manager...");
-        this.displayTable(res);
-      });
+    ]);
+    query.getEmployeesByManager(answers.manager_id).then((res) => { 
+      console.log("Viewing employees by manager...");
+      this.displayTable(res);
     });
   }
 
-  deleteDepartment() {
+  async deleteDepartment() {
     console.log("Beginning the process of deleting a department...");
     this.viewAllDepartments();
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "department_id",
         message: "What is the ID of the department?"
       }
-    ]).then((answers) => {
-      query.deleteDepartment(answers.department_id).then((_res) => { 
-        console.log("Department deleted successfully!"); 
-        this.viewAllDepartments();
-      });
+    ]);
+    query.deleteDepartment(answers.department_id).then((_res) => { 
+      console.log("Department deleted successfully!"); 
+      this.viewAllDepartments();
     });
   }
 
-  deleteRoles() {
+  async deleteRoles() {
     //TODO: add the option to replace the role with a new role
     console.log("Beginning the process of deleting a role...");
     this.viewAllRoles();
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "role_id",
         message: "What is the ID of the role?"
       }
-    ]).then((answers) => {
-      query.deleteRole(answers.role_id).then((_res) => { 
-        console.log("Role deleted successfully!"); 
-        this.viewAllRoles();
-      });
+    ]);
+    query.deleteRole(answers.role_id).then((_res) => { 
+      console.log("Role deleted successfully!"); 
+      this.viewAllRoles();
     });
   }
 
-  deleteEmployee() {
+  async deleteEmployee() {
     console.log("Beginning the process of deleting an employee...");
     this.viewAllEmployees();
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "employee_id",
         message: "What is the ID of the employee?"
       }
-    ]).then((answers) => {
-      query.deleteEmployee(answers.employee_id).then((_res) => { 
-        console.log("Employee deleted successfully!"); 
-        this.viewAllEmployees();
-      });
+    ]);
+    query.deleteEmployee(answers.employee_id).then((_res) => { 
+      console.log("Employee deleted successfully!"); 
+      this.viewAllEmployees();
     });
   }
 
-  getDepartmentBudget() {
+  async getDepartmentBudget() {
     console.log("Beginning the process of viewing the department budget utilization...");
     this.viewAllDepartments();
-    inquirer.prompt([
+    const answers = await inquirer.prompt([
       {
         type: "input",
         name: "department_id",
         message: "What is the ID of the department?"
       }
-    ]).then((answers) => {
-      query.getDepartmentBudget(answers.department_id).then((res) => { 
-        console.log("Viewing the total department budget utilization...");
-        this.displayTable(res);
-      });
+    ]);
+    query.getDepartmentBudget(answers.department_id).then((res) => { 
+      console.log("Viewing the total department budget utilization...");
+      this.displayTable(res);
     });
   }
 
@@ -361,11 +354,84 @@ class Cli {
     Define CLI user interaction functions
   */
 
-  // TODO: add a main menu
-  // TODO: add a sub-menu for each main menu option
-  // TODO: add a back option to each sub-menu
-  // TODO: add a quit option to the main menu
-  
+  // TODONE: add a main menu to loop through
+  // TODONE: add a quit option to the main menu
+  async mainMenu() {
+    const answers = await inquirer.prompt([
+      {
+          type: "list",
+          name: "action",
+          message: "What would you like to do?",
+          choices: [
+              "View All Departments",
+              "View All Roles",
+              "View All Employees",
+              "Add Department",
+              "Add Role",
+              "Add Employee",
+              "Update Employee Role",
+              "Update Employee Manager",
+              "View Employees By Manager",
+              "Delete Department",
+              "Delete Role",
+              "Delete Employee",
+              "View Department Budget",
+              "Quit"
+          ]
+      }
+    ]);
+    
+    switch (answers.action) {
+      case "View All Departments":
+          this.viewAllDepartments();
+          break;
+      case "View All Roles":
+          this.viewAllRoles();
+          break;
+      case "View All Employees":
+          this.viewAllEmployees();
+          break;
+      case "Add Department":
+          await this.addDepartment();
+          break;
+      case "Add Role":
+          await this.addRole();
+          break;
+      case "Add Employee":
+          await this.addEmployee();
+          break;
+      case "Update Employee Role":
+          await this.updateEmployeeRole();
+          break;
+      case "Update Employee Manager":
+          await this.updateEmployeeManager();
+          break;
+      case "View Employees By Manager":
+          await this.viewEmployeesByManager();
+          break;
+      case "Delete Department":
+          await this.deleteDepartment();
+          break;
+      case "Delete Role":
+          await this.deleteRoles();
+          break;
+      case "Delete Employee":
+          await this.deleteEmployee();
+          break;
+      case "View Department Budget":
+          await this.getDepartmentBudget();
+          break;
+      case "Quit":
+          console.log("Thank you for using Big Company data!");
+          process.exit();
+          break;
+      default:
+          console.log("Invalid action. Please try again.");
+          break;
+    }
+    // Call mainMenu again to loop back
+    this.mainMenu();
+  }
 }
 
 // export the Cli class
