@@ -48,7 +48,7 @@ A CLI Node.js server that utilizes the PostgreSQL database format to store compa
     ```
 2. Follow the CLI prompts to interact with the server.
 
-3. A demonstration video can be found [here](https://youtube.com/MagicInUse/).
+3. A demonstration video can be found [here](https://youtu.be/c9jEHYQS5nw).
 
 ## License
 

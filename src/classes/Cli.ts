@@ -26,6 +26,8 @@ class Cli {
      Welcome to the Big Company CLI!`);
       // call the testPrompt method for an example server response
       // this.testPrompt();
+
+      // called other prompts as well to make sure they functioned correctly
       // this.viewAllDepartments();
       // this.viewAllRoles();
       // this.viewAllEmployees();
@@ -430,7 +432,7 @@ class Cli {
           break;
     }
     // Call mainMenu again to loop back
-    this.mainMenu();
+    await this.mainMenu();
   }
 }
 
